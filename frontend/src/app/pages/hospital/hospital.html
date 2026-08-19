@@ -1,0 +1,70 @@
+<section class="page">
+
+  <div class="card">
+    <h2>New Blood Request</h2>
+
+    <form (ngSubmit)="createRequest()">
+
+      <div class="form-group">
+        <label for="hospitalName">Hospital Name</label>
+        <input id="hospitalName" type="text" name="hospitalName" [(ngModel)]="form.hospitalName" required />
+      </div>
+
+      <div class="form-group">
+        <label for="bloodType">Blood Type</label>
+        <select id="bloodType" name="bloodType" [(ngModel)]="form.bloodType" required>
+          @for (type of bloodTypes; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity (units)</label>
+        <input id="quantity" type="number" name="quantity" [(ngModel)]="form.quantity" min="1" required />
+      </div>
+
+      @if (message()) {
+        <p class="message">{{ message() }}</p>
+      }
+
+      <button type="submit">Submit Request</button>
+
+    </form>
+  </div>
+
+
+  <div class="card">
+    <h2>All Requests</h2>
+
+    @if (loading()) {
+      <p>Loading...</p>
+    } @else if (requests().length === 0) {
+      <p>No requests yet.</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Hospital</th>
+            <th>Blood Type</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (request of requests(); track request._id) {
+            <tr>
+              <td>{{ request.hospitalName }}</td>
+              <td>{{ request.bloodType }}</td>
+              <td>{{ request.quantity }}</td>
+              <td><span class="badge" [class]="request.status">{{ request.status }}</span></td>
+              <td>{{ request.createdAt | date }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+</section>

@@ -1,0 +1,78 @@
+<section class="page">
+
+  <div class="card">
+    <h2>Blood Requests</h2>
+
+    @if (message()) {
+      <p class="message">{{ message() }}</p>
+    }
+
+    @if (loading()) {
+      <p>Loading...</p>
+    } @else if (requests().length === 0) {
+      <p>No requests yet.</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Hospital</th>
+            <th>Blood Type</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (request of requests(); track request._id) {
+            <tr>
+              <td>{{ request.hospitalName }}</td>
+              <td>{{ request.bloodType }}</td>
+              <td>{{ request.quantity }}</td>
+              <td><span class="badge" [class]="request.status">{{ request.status }}</span></td>
+              <td>{{ request.createdAt | date }}</td>
+              <td class="actions">
+                @if (isPending(request)) {
+                  <button class="approve" (click)="approve(request._id)">Approve</button>
+                  <button class="reject" (click)="reject(request._id)">Reject</button>
+                }
+                <button class="delete" (click)="remove(request._id)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+
+  <div class="card">
+    <h2>Registered Donors</h2>
+
+    @if (donors().length === 0) {
+      <p>No donors registered yet.</p>
+    } @else {
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Blood Type</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (donor of donors(); track donor._id) {
+            <tr>
+              <td>{{ donor.name }}</td>
+              <td>{{ donor.phone }}</td>
+              <td>{{ donor.bloodType }}</td>
+              <td>{{ donor.createdAt | date }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+</section>

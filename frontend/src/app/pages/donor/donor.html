@@ -1,0 +1,58 @@
+<section class="page">
+
+  <div class="card">
+    <h2>Approved Blood Requests</h2>
+
+    @if (loading()) {
+      <p>Loading...</p>
+    } @else if (requests().length === 0) {
+      <p>No approved blood requests right now.</p>
+    } @else {
+      <div class="cards">
+        @for (request of requests(); track request._id) {
+          <div class="request-card">
+            <div class="type">{{ request.bloodType }}</div>
+            <p><strong>Hospital:</strong> {{ request.hospitalName }}</p>
+            <p><strong>Quantity:</strong> {{ request.quantity }} units</p>
+            <p class="date">{{ request.createdAt | date }}</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+
+  <div class="card">
+    <h2>Register as a Donor</h2>
+
+    <form (ngSubmit)="registerDonor()">
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" name="name" [(ngModel)]="form.name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input id="phone" type="text" name="phone" [(ngModel)]="form.phone" required />
+      </div>
+
+      <div class="form-group">
+        <label for="bloodType">Blood Type</label>
+        <select id="bloodType" name="bloodType" [(ngModel)]="form.bloodType" required>
+          @for (type of bloodTypes; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
+
+      @if (message()) {
+        <p class="message">{{ message() }}</p>
+      }
+
+      <button type="submit">Register</button>
+
+    </form>
+  </div>
+
+</section>
